@@ -1,8 +1,8 @@
 """
 Task 1 - API Integration and Data Visualization
 Internship: CODTECH
-Author: Your Name
-Date: YYYY-MM-DD
+Author: Saurav Tiwari 
+Date: 2025-08-08
 
 Description:
 This script fetches weather forecast data from the OpenWeatherMap API
@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # ---------------------- USER SETTINGS ----------------------
-API_KEY = "4f70b5b0f9528de411fbc5f0b62d06a5"  # Replace with your API Key from OpenWeatherMap
+API_KEY = ""  # Replace with your API Key from OpenWeatherMap
 CITY = "Mumbai"           # Change the city name as needed
 # ------------------------------------------------------------
 
