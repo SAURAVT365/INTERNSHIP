@@ -1,0 +1,67 @@
+# CODTECH Internship - Task 4
+# Machine Learning Model Implementation: Spam Email Detection
+# Author: Saurav Tiwari
+# Date: 2025-08-05
+
+# ===================== 1. IMPORT LIBRARIES =====================
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# ===================== 2. SAMPLE DATASET =====================
+# Small embedded dataset (label: 'spam' or 'ham')
+data = {
+    "label": ["ham", "spam", "ham", "spam", "ham", "spam", "ham", "spam", "ham", "spam"],
+    "message": [
+        "Hey, are we still meeting for lunch today?",
+        "Congratulations! You have won a $1000 Walmart gift card. Click here to claim now!",
+        "Can you send me the report by tomorrow morning?",
+        "Free entry in 2 a weekly competition to win FA Cup final tickets. Text to enter.",
+        "Let's meet at 6 pm near the mall.",
+        "You have been selected for a free cruise to the Bahamas! Call now.",
+        "I'll call you once I reach home.",
+        "URGENT! Your account has been compromised. Verify immediately.",
+        "The meeting is postponed to Monday.",
+        "Win cash prizes now! Limited time offer, click to participate."
+    ]
+}
+df = pd.DataFrame(data)
+
+# ===================== 3. DATA PREPROCESSING =====================
+# Convert labels to numeric (spam=1, ham=0)
+df["label_num"] = df["label"].map({"ham": 0, "spam": 1})
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(df["message"], df["label_num"], test_size=0.3, random_state=42)
+
+# Vectorize text using TF-IDF
+vectorizer = TfidfVectorizer(stop_words="english")
+X_train_vec = vectorizer.fit_transform(X_train)
+X_test_vec = vectorizer.transform(X_test)
+
+# ===================== 4. MODEL TRAINING =====================
+model = MultinomialNB()
+model.fit(X_train_vec, y_train)
+
+# ===================== 5. PREDICTION & EVALUATION =====================
+y_pred = model.predict(X_test_vec)
+
+# Accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy*100:.2f}%\n")
+
+# Classification report
+print("Classification Report:\n", classification_report(y_test, y_pred, target_names=["Ham", "Spam"]))
+
+# Confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=["Ham", "Spam"], yticklabels=["Ham", "Spam"])
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix")
+plt.show()
